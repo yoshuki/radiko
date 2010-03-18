@@ -1,0 +1,7 @@
+= radiko
+
+radiko.jp(http://radiko.jp/) プレイヤー
+
+== Copyright
+
+Copyright (c) 2010 MIKAMI Yoshiyuki. See LICENSE for details.

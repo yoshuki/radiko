@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="250" height="730" resizable="false" maximizable="false" showFlexChrome="false" title="{Radiko.APP_NAME}" windowComplete="initWin(event)">
+  <mx:Script source="actionscripts/playerWindow.as"/>
+  <mx:Button x="0" y="0" width="250" height="30" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
+  <mx:ComboBox x="0" y="30" width="180" height="20" id="stations">
+    <mx:ArrayCollection>
+      <!-- 関東 -->
+      <mx:Object label="TBSラジオ"    data="TBS"/>
+      <mx:Object label="文化放送"     data="QRR"/>
+      <mx:Object label="ニッポン放送" data="LFR"/>
+      <mx:Object label="ラジオNIKKEI" data="NSB"/>
+      <mx:Object label="InterFM"      data="INT"/>
+      <mx:Object label="TOKYO FM"     data="FMT"/>
+      <mx:Object label="J-WAVE"       data="FMJ"/>
+      <!-- 関西 -->
+      <mx:Object label="ABCラジオ"    data="ABC"/>
+      <mx:Object label="MBSラジオ"    data="MBS"/>
+      <mx:Object label="ラジオ大阪"   data="OBC"/>
+      <mx:Object label="FM COCOLO"    data="CCL"/>
+      <mx:Object label="FM802"        data="802"/>
+      <mx:Object label="FM大阪"       data="FMO"/>
+    </mx:ArrayCollection>
+  </mx:ComboBox>
+  <mx:CheckBox x="185" y="30" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
+  <mx:HTML x="0" y="50" width="250" height="680" horizontalScrollPolicy="off" verticalScrollPolicy="off" id="player"/>
+</mx:Window>
