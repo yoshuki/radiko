@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="250" height="730" resizable="false" maximizable="false" showFlexChrome="false" title="{Radiko.APP_NAME}" windowComplete="initWin(event)">
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="250" height="730" maximizable="false" showFlexChrome="false" windowComplete="initWin(event)">
   <mx:Script source="actionscripts/playerWindow.as"/>
   <mx:Button x="0" y="0" width="250" height="30" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
   <mx:ComboBox x="0" y="30" width="180" height="20" id="stations">

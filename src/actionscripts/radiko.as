@@ -1,4 +1,5 @@
 import flash.desktop.NativeApplication
+import flash.events.ErrorEvent
 import flash.events.Event
 
 import mx.events.FlexEvent
@@ -36,7 +37,7 @@ private function initApp(event:FlexEvent):void {
       var stIcon:SystemTrayIcon = SystemTrayIcon(NativeApplication.nativeApplication.icon)
       icon = stIcon
       stIcon.menu = menu
-      stIcon.tooltip = Radiko.APP_NAME
+      stIcon.tooltip = Radiko.appInfo.name
       icon.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
         if (Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked) {
           NativeApplication.nativeApplication.activate()
@@ -79,10 +80,17 @@ private function initApp(event:FlexEvent):void {
       }
     })
 
-    // 他のイベントで終了中を検知するためフラグを立てる
+    // 終了時に、他のイベントで終了中を検知するためフラグを立てる
     NativeApplication.nativeApplication.addEventListener(Event.EXITING, function (event:Event):void {
       Radiko.exiting = true
     })
+
+    // アップデート確認
+    Radiko.appUpdater.configurationFile = new File("app:/update-config.xml")
+    Radiko.appUpdater.addEventListener(ErrorEvent.ERROR, function (event:ErrorEvent):void {
+      // 動作に直接の支障はないため無視
+    })
+    Radiko.appUpdater.initialize()
   } else {
     trace('Failed to create icon.')
     // 操作不能回避のため、アイコンが登録できなければ終了

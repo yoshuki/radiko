@@ -68,5 +68,9 @@ private function initWin(event:AIREvent):void {
     }
   })
 
+  // ウィンドウのタイトル
+  var appInfo:Object = Radiko.appInfo
+  Radiko.playerWindow.title = appInfo.name + ' Ver.' + appInfo.version
+
   Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
 }
