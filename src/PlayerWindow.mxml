@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="250" height="730" maximizable="false" showFlexChrome="false" windowComplete="initWin(event)">
+<?xml version="1.0" encoding="UTF-8"?>
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="250" height="{Radiko.WINDOW_HEIGHT_FULL}" maximizable="false" showFlexChrome="false" windowComplete="initWin(event)">
   <mx:Script source="actionscripts/playerWindow.as"/>
-  <mx:Button x="0" y="0" width="250" height="30" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
-  <mx:ComboBox x="0" y="30" width="180" height="20" id="stations">
+  <mx:Button x="0" y="0" width="175" height="25" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
+  <mx:CheckBox x="183" y="0" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
+  <mx:ComboBox x="0" y="25" width="175" height="20" id="stations">
     <mx:ArrayCollection>
       <!-- 関東 -->
       <mx:Object label="TBSラジオ"    data="TBS"/>
@@ -21,6 +22,11 @@
       <mx:Object label="FM大阪"       data="FMO"/>
     </mx:ArrayCollection>
   </mx:ComboBox>
-  <mx:CheckBox x="185" y="30" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
-  <mx:HTML x="0" y="50" width="250" height="680" horizontalScrollPolicy="off" verticalScrollPolicy="off" id="player"/>
+  <mx:ComboBox x="175" y="25" width="75" height="20" id="windowMode">
+    <mx:ArrayCollection>
+      <mx:Object label="フル" data="{Radiko.WINDOW_MODE_FULL}"/>
+      <mx:Object label="ミニ" data="{Radiko.WINDOW_MODE_MINI}"/>
+    </mx:ArrayCollection>
+  </mx:ComboBox>
+  <mx:HTML x="0" y="45" width="250" height="{Radiko.PLAYER_HEIGHT_FULL}" horizontalScrollPolicy="off" verticalScrollPolicy="off" id="player"/>
 </mx:Window>

@@ -1,3 +1,6 @@
+import com.adobe.serialization.json.JSON
+
+import flash.desktop.NativeApplication
 import flash.display.NativeWindowDisplayState
 import flash.events.NativeWindowDisplayStateEvent
 
@@ -9,20 +12,31 @@ import radiko.Radiko
 private function initWin(event:AIREvent):void {
   var window:PlayerWindow = (event.target as PlayerWindow)
   var station:String = Radiko.DEFAULT_STATION
+  var winMode:int = Radiko.WINDOW_MODE_FULL
 
-  // 保存した放送局を読み込む
+  // 設定を読み込む
   try {
-    Radiko.openFile(Radiko.STATION_STORAGE, FileMode.READ, function (fs:FileStream):void {
-      station = fs.readUTF()
+    Radiko.openFile(Radiko.CONFIG_FILE, FileMode.READ, function (fs:FileStream):void {
+      Radiko.config = JSON.decode(fs.readUTF())
+      station = Radiko.config.station
+      winMode = Radiko.config.winMode
     })
   } catch (error:Error) {
-    // stationはRadiko.DEFAULT_STATIONのまま
+    trace(error)
   }
 
   // 読み込んだ放送局を選択状態にする
-  for each (var value:Object in window.stations.dataProvider) {
-    if (value.data == station) {
-      window.stations.selectedItem = value
+  for each (var sVal:Object in window.stations.dataProvider) {
+    if (sVal.data == station) {
+      window.stations.selectedItem = sVal
+      break
+    }
+  }
+
+  // 読み込んだウィンドウサイズを選択状態にする
+  for each (var wmVal:Object in window.windowMode.dataProvider) {
+    if (wmVal.data == winMode) {
+      window.windowMode.selectedItem = wmVal
       break
     }
   }
@@ -33,6 +47,11 @@ private function initWin(event:AIREvent):void {
   window.stations.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
     // 選択された放送局のページを開く
     window.player.location = Radiko.PLAYER_URL_BASE + window.stations.selectedItem.data
+  })
+
+  window.windowMode.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
+    // ウィンドウモードを切り替える
+    Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
   })
 
   window.addEventListener(NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, function (event:NativeWindowDisplayStateEvent):void {
@@ -54,17 +73,20 @@ private function initWin(event:AIREvent):void {
     // アプリケーション終了中でなければウィンドウを閉じずに非表示にする
     if (!Radiko.exiting) {
       event.preventDefault()
+      window.visible = false  // すぐに消す
       window.minimize()
     }
   })
   window.addEventListener(Event.CLOSE, function (event:Event):void {
-    // 選択状態の放送局を保存する
+    // 設定を保存する
     try {
-      Radiko.openFile(Radiko.STATION_STORAGE, FileMode.WRITE, function (fs:FileStream):void {
-        fs.writeUTF(window.stations.selectedItem.data)
+      Radiko.openFile(Radiko.CONFIG_FILE, FileMode.WRITE, function (fs:FileStream):void {
+        Radiko.config.station = window.stations.selectedItem.data
+        Radiko.config.winMode = window.windowMode.selectedItem.data
+        fs.writeUTF(JSON.encode(Radiko.config))
       })
     } catch (error:Error) {
-      // 前回保存した放送局のまま
+      trace(error)
     }
   })
 
@@ -73,4 +95,5 @@ private function initWin(event:AIREvent):void {
   Radiko.playerWindow.title = appInfo.name + ' Ver.' + appInfo.version
 
   Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
+  Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
 }

@@ -11,22 +11,6 @@ private var IconImage16:Class
 [Embed(source='images/radiko128.png')]
 private var IconImage128:Class
 
-private function togglePlayerWindow():void {
-  var item:NativeMenuItem = Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW)
-  var window:PlayerWindow = Radiko.playerWindow
-
-  // プレイヤーウィンドウを開いたり閉じたり
-  if (item.checked) {
-    window.minimize()
-  } else {
-    if (window == null || window.closed) {
-      Radiko.playerWindow = window = new PlayerWindow()
-      window.open()
-    }
-    window.restore()
-  }
-}
-
 private function initApp(event:FlexEvent):void {
   if (NativeApplication.supportsSystemTrayIcon || NativeApplication.supportsDockIcon) {
     var menu:NativeMenu = Radiko.iconMenu
@@ -42,7 +26,7 @@ private function initApp(event:FlexEvent):void {
         if (Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked) {
           NativeApplication.nativeApplication.activate()
         } else {
-          togglePlayerWindow()
+          Radiko.togglePlayerWindow()
         }
       })
     } else if (NativeApplication.supportsDockIcon) {
@@ -61,7 +45,7 @@ private function initApp(event:FlexEvent):void {
     menu.addItem(showWindowItem)
     showWindowItem.name = Radiko.MENU_SHOW_WINDOW
     showWindowItem.addEventListener(Event.SELECT, function (event:Event):void {
-      togglePlayerWindow()
+      Radiko.togglePlayerWindow()
     })
 
     // メニュー - 終了
@@ -76,7 +60,7 @@ private function initApp(event:FlexEvent):void {
       if (Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked) {
         NativeApplication.nativeApplication.activate()
       } else {
-        togglePlayerWindow()
+        Radiko.togglePlayerWindow()
       }
     })
 
