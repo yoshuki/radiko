@@ -1,5 +1,4 @@
 import flash.desktop.NativeApplication
-import flash.events.ErrorEvent
 import flash.events.Event
 
 import mx.events.FlexEvent
@@ -12,6 +11,9 @@ private var IconImage16:Class
 private var IconImage128:Class
 
 private function initApp(event:FlexEvent):void {
+  // メモリ使用量軽減対策(効果未確認)
+  (event.target as Application).removeEventListener(FlexEvent.APPLICATION_COMPLETE, initApp)
+
   if (NativeApplication.supportsSystemTrayIcon || NativeApplication.supportsDockIcon) {
     var menu:NativeMenu = Radiko.iconMenu
 
@@ -70,11 +72,7 @@ private function initApp(event:FlexEvent):void {
     })
 
     // アップデート確認
-    Radiko.appUpdater.configurationFile = new File("app:/update-config.xml")
-    Radiko.appUpdater.addEventListener(ErrorEvent.ERROR, function (event:ErrorEvent):void {
-      // 動作に直接の支障はないため無視
-    })
-    Radiko.appUpdater.initialize()
+    Radiko.checkUpdate()
   } else {
     trace('Failed to create icon.')
     // 操作不能回避のため、アイコンが登録できなければ終了

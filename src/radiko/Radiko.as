@@ -4,6 +4,7 @@ package radiko {
   import flash.desktop.NativeApplication
   import flash.display.NativeMenu
   import flash.display.NativeMenuItem
+  import flash.events.ErrorEvent
   import flash.filesystem.File
   import flash.filesystem.FileStream
 
@@ -53,12 +54,6 @@ package radiko {
       _playerWindow = window
     }
 
-    // アップデーター
-    private static var _appUpdater:ApplicationUpdaterUI = new ApplicationUpdaterUI()
-    public static function get appUpdater():ApplicationUpdaterUI {
-      return _appUpdater
-    }
-
     // ファイルを開く(同期処理)
     public static function openFile(fileName:String, mode:String, handler:Function):void {
       var file:File = File.applicationStorageDirectory.resolvePath(fileName)
@@ -100,6 +95,17 @@ package radiko {
         playerWindow.height = WINDOW_HEIGHT_FULL
         break
       }
+    }
+
+    // アップデート確認
+    public static function checkUpdate():void {
+      var appUpdater:ApplicationUpdaterUI = new ApplicationUpdaterUI()
+      appUpdater.configurationFile = new File("app:/update-config.xml")
+      appUpdater.addEventListener(ErrorEvent.ERROR, function (event:ErrorEvent):void {
+        // 動作に直接の支障はないため無視
+      })
+      appUpdater.initialize()
+      appUpdater = null
     }
  }
 }

@@ -11,6 +11,9 @@ import radiko.Radiko
 
 private function initWin(event:AIREvent):void {
   var window:PlayerWindow = (event.target as PlayerWindow)
+  // メモリ使用量軽減対策(効果未確認)
+  window.removeEventListener(AIREvent.WINDOW_COMPLETE, initWin)
+
   var station:String = Radiko.DEFAULT_STATION
   var winMode:int = Radiko.WINDOW_MODE_FULL
 
@@ -18,8 +21,8 @@ private function initWin(event:AIREvent):void {
   try {
     Radiko.openFile(Radiko.CONFIG_FILE, FileMode.READ, function (fs:FileStream):void {
       Radiko.config = JSON.decode(fs.readUTF())
-      station = Radiko.config.station
-      winMode = Radiko.config.winMode
+      if (Radiko.config.station != null) station = Radiko.config.station
+      if (Radiko.config.winMode != null) winMode = Radiko.config.winMode
     })
   } catch (error:Error) {
     trace(error)
@@ -33,7 +36,7 @@ private function initWin(event:AIREvent):void {
     }
   }
 
-  // 読み込んだウィンドウサイズを選択状態にする
+  // 読み込んだウィンドウモードを選択状態にする
   for each (var wmVal:Object in window.windowMode.dataProvider) {
     if (wmVal.data == winMode) {
       window.windowMode.selectedItem = wmVal
@@ -92,7 +95,7 @@ private function initWin(event:AIREvent):void {
 
   // ウィンドウのタイトル
   var appInfo:Object = Radiko.appInfo
-  Radiko.playerWindow.title = appInfo.name + ' Ver.' + appInfo.version
+  Radiko.playerWindow.title = appInfo.name + ' Ver. ' + appInfo.version
 
   Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
   Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
