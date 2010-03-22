@@ -23,7 +23,8 @@ private function initApp(event:FlexEvent):void {
       var stIcon:SystemTrayIcon = SystemTrayIcon(NativeApplication.nativeApplication.icon)
       icon = stIcon
       stIcon.menu = menu
-      stIcon.tooltip = Radiko.appInfo.name
+      var appInfo:Object = Radiko.appInfo
+      stIcon.tooltip = appInfo.name + ' ' + appInfo.version
       icon.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
         if (Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked) {
           NativeApplication.nativeApplication.activate()

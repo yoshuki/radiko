@@ -105,7 +105,6 @@ package radiko {
         // 動作に直接の支障はないため無視
       })
       appUpdater.initialize()
-      appUpdater = null
     }
  }
 }

@@ -2,9 +2,11 @@ import com.adobe.serialization.json.JSON
 
 import flash.desktop.NativeApplication
 import flash.display.NativeWindowDisplayState
+import flash.display.Screen
 import flash.events.NativeWindowDisplayStateEvent
 
 import mx.events.AIREvent
+import mx.events.FlexNativeWindowBoundsEvent
 import mx.events.ListEvent
 
 import radiko.Radiko
@@ -16,6 +18,8 @@ private function initWin(event:AIREvent):void {
 
   var station:String = Radiko.DEFAULT_STATION
   var winMode:int = Radiko.WINDOW_MODE_FULL
+  var winPosX:Number
+  var winPosY:Number
 
   // 設定を読み込む
   try {
@@ -23,6 +27,8 @@ private function initWin(event:AIREvent):void {
       Radiko.config = JSON.decode(fs.readUTF())
       if (Radiko.config.station != null) station = Radiko.config.station
       if (Radiko.config.winMode != null) winMode = Radiko.config.winMode
+      if (Radiko.config.winPosX != null) winPosX = Radiko.config.winPosX
+      if (Radiko.config.winPosY != null) winPosY = Radiko.config.winPosY
     })
   } catch (error:Error) {
     trace(error)
@@ -36,6 +42,9 @@ private function initWin(event:AIREvent):void {
     }
   }
 
+  // 読み込んだ放送局のページを開く
+  window.player.location = Radiko.PLAYER_URL_BASE + window.stations.selectedItem.data
+
   // 読み込んだウィンドウモードを選択状態にする
   for each (var wmVal:Object in window.windowMode.dataProvider) {
     if (wmVal.data == winMode) {
@@ -44,17 +53,21 @@ private function initWin(event:AIREvent):void {
     }
   }
 
-  // 読み込んだ放送局のページを開く
-  window.player.location = Radiko.PLAYER_URL_BASE + window.stations.selectedItem.data
-
   window.stations.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
+    Radiko.config.station = window.stations.selectedItem.data
     // 選択された放送局のページを開く
     window.player.location = Radiko.PLAYER_URL_BASE + window.stations.selectedItem.data
   })
 
   window.windowMode.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
+    Radiko.config.winMode = window.windowMode.selectedItem.data
     // ウィンドウモードを切り替える
     Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
+  })
+
+  window.addEventListener(FlexNativeWindowBoundsEvent.WINDOW_MOVE, function (event:FlexNativeWindowBoundsEvent):void {
+    Radiko.config.winPosX = window.nativeWindow.x
+    Radiko.config.winPosY = window.nativeWindow.y
   })
 
   window.addEventListener(NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, function (event:NativeWindowDisplayStateEvent):void {
@@ -73,8 +86,8 @@ private function initWin(event:AIREvent):void {
     }
   })
   window.addEventListener(Event.CLOSING, function (event:Event):void {
-    // アプリケーション終了中でなければウィンドウを閉じずに非表示にする
     if (!Radiko.exiting) {
+      // アプリケーション終了中でなければウィンドウを閉じずに非表示にする
       event.preventDefault()
       window.visible = false  // すぐに消す
       window.minimize()
@@ -84,8 +97,6 @@ private function initWin(event:AIREvent):void {
     // 設定を保存する
     try {
       Radiko.openFile(Radiko.CONFIG_FILE, FileMode.WRITE, function (fs:FileStream):void {
-        Radiko.config.station = window.stations.selectedItem.data
-        Radiko.config.winMode = window.windowMode.selectedItem.data
         fs.writeUTF(JSON.encode(Radiko.config))
       })
     } catch (error:Error) {
@@ -95,8 +106,16 @@ private function initWin(event:AIREvent):void {
 
   // ウィンドウのタイトル
   var appInfo:Object = Radiko.appInfo
-  Radiko.playerWindow.title = appInfo.name + ' Ver. ' + appInfo.version
+  Radiko.playerWindow.title = appInfo.name + ' ' + appInfo.version
 
   Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
   Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
+
+  // モード変更後のウィンドウサイズで中心を計算する
+  if (isNaN(winPosX)) winPosX = Screen.mainScreen.visibleBounds.right / 2 - window.width / 2
+  if (isNaN(winPosY)) winPosY = Screen.mainScreen.visibleBounds.bottom / 2 - window.height / 2
+
+  // ウィンドウを移動する
+  window.nativeWindow.x = winPosX
+  window.nativeWindow.y = winPosY
 }
