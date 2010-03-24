@@ -4,6 +4,7 @@ import flash.desktop.NativeApplication
 import flash.display.NativeWindowDisplayState
 import flash.display.Screen
 import flash.events.NativeWindowDisplayStateEvent
+import flash.geom.Rectangle
 
 import mx.events.AIREvent
 import mx.events.FlexNativeWindowBoundsEvent
@@ -53,6 +54,31 @@ private function initWin(event:AIREvent):void {
     }
   }
 
+  // 読み込んだウィンドウモードに切り替える
+  window.visible = false
+  Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
+  window.visible = Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
+
+  var vb:Rectangle = Screen.mainScreen.visibleBounds
+
+  // ウィンドウモード変更後のウィンドウサイズで中心を計算する
+  if (isNaN(winPosX)) winPosX = vb.right / 2 - window.width / 2
+  if (isNaN(winPosY)) winPosY = vb.bottom / 2 - window.height / 2
+
+  // 表示領域外だった場合には補正する
+  if (winPosX < vb.left)   winPosX = vb.left
+  if (winPosX > vb.right)  winPosX = vb.right - window.width
+  if (winPosY < vb.top)    winPosY = vb.top
+  if (winPosY > vb.bottom) winPosY = vb.bottom - window.height
+
+  // ウィンドウを移動する
+  window.nativeWindow.x = winPosX
+  window.nativeWindow.y = winPosY
+
+  // ウィンドウのタイトル
+  var appInfo:Object = Radiko.appInfo
+  Radiko.playerWindow.title = appInfo.name + ' ' + appInfo.version
+
   window.stations.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
     Radiko.config.station = window.stations.selectedItem.data
     // 選択された放送局のページを開く
@@ -89,7 +115,6 @@ private function initWin(event:AIREvent):void {
     if (!Radiko.exiting) {
       // アプリケーション終了中でなければウィンドウを閉じずに非表示にする
       event.preventDefault()
-      window.visible = false  // すぐに消す
       window.minimize()
     }
   })
@@ -103,19 +128,4 @@ private function initWin(event:AIREvent):void {
       trace(error)
     }
   })
-
-  // ウィンドウのタイトル
-  var appInfo:Object = Radiko.appInfo
-  Radiko.playerWindow.title = appInfo.name + ' ' + appInfo.version
-
-  Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
-  Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
-
-  // モード変更後のウィンドウサイズで中心を計算する
-  if (isNaN(winPosX)) winPosX = Screen.mainScreen.visibleBounds.right / 2 - window.width / 2
-  if (isNaN(winPosY)) winPosY = Screen.mainScreen.visibleBounds.bottom / 2 - window.height / 2
-
-  // ウィンドウを移動する
-  window.nativeWindow.x = winPosX
-  window.nativeWindow.y = winPosY
 }
