@@ -6,6 +6,7 @@ import flash.display.Screen
 import flash.events.NativeWindowDisplayStateEvent
 import flash.geom.Rectangle
 
+import mx.core.Window
 import mx.events.AIREvent
 import mx.events.FlexNativeWindowBoundsEvent
 import mx.events.ListEvent
@@ -80,20 +81,23 @@ private function initWin(event:AIREvent):void {
   Radiko.playerWindow.title = appInfo.name + ' ' + appInfo.version
 
   window.stations.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
-    Radiko.config.station = window.stations.selectedItem.data
+    var data:String = (event.target as ComboBox).selectedItem.data
+    Radiko.config.station = data
     // 選択された放送局のページを開く
-    window.player.location = Radiko.PLAYER_URL_BASE + window.stations.selectedItem.data
+    Radiko.playerWindow.player.location = Radiko.PLAYER_URL_BASE + data
   })
 
   window.windowMode.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
-    Radiko.config.winMode = window.windowMode.selectedItem.data
+    var data:int = (event.target as ComboBox).selectedItem.data
+    Radiko.config.winMode = data
     // ウィンドウモードを切り替える
-    Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
+    Radiko.changePlayerWindowMode(data)
   })
 
   window.addEventListener(FlexNativeWindowBoundsEvent.WINDOW_MOVE, function (event:FlexNativeWindowBoundsEvent):void {
-    Radiko.config.winPosX = window.nativeWindow.x
-    Radiko.config.winPosY = window.nativeWindow.y
+    var nw:NativeWindow = (event.target as Window).nativeWindow
+    Radiko.config.winPosX = nw.x
+    Radiko.config.winPosY = nw.y
   })
 
   window.addEventListener(NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, function (event:NativeWindowDisplayStateEvent):void {
@@ -115,7 +119,7 @@ private function initWin(event:AIREvent):void {
     if (!Radiko.exiting) {
       // アプリケーション終了中でなければウィンドウを閉じずに非表示にする
       event.preventDefault()
-      window.minimize()
+      (event.target as Window).minimize()
     }
   })
   window.addEventListener(Event.CLOSE, function (event:Event):void {
