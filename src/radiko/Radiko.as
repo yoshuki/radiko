@@ -13,6 +13,8 @@ package radiko {
     public static const DEFAULT_STATION:String = 'TBS'
     public static const CONFIG_FILE:String = 'config.json'
     public static const MENU_SHOW_WINDOW:String = 'showWindow'
+    public static const WINDOW_TOGGLE_SHOW:int = 0
+    public static const WINDOW_TOGGLE_HIDE:int = 1
     public static const WINDOW_MODE_FULL:int = 0
     public static const WINDOW_MODE_MINI:int = 1
     public static const WINDOW_HEIGHT_FULL:int = 725
@@ -64,18 +66,31 @@ package radiko {
     }
 
     // ウィンドウ表示を切り替える
-    public static function togglePlayerWindow():void {
+    public static function togglePlayerWindow(action:int=-1):void {
       var item:NativeMenuItem = iconMenu.getItemByName(MENU_SHOW_WINDOW)
 
-      // プレイヤーウィンドウを開いたり閉じたり
+      switch (action) {
+      case WINDOW_TOGGLE_SHOW:
+        item.checked = true
+        break
+      case WINDOW_TOGGLE_HIDE:
+        item.checked = false
+        break
+      default:
+        item.checked = !item.checked
+      }
+
+      // プレイヤーウィンドウを表示したり消したり
       if (item.checked) {
-        playerWindow.minimize()
-      } else {
         if (playerWindow == null || playerWindow.closed) {
           playerWindow = new PlayerWindow()
           playerWindow.open()
         }
+        playerWindow.visible = true
         playerWindow.restore()
+        NativeApplication.nativeApplication.activate()
+      } else {
+        playerWindow.visible = false
       }
     }
 
@@ -93,7 +108,6 @@ package radiko {
         if (contents != null) contents.style.display = ''
         playerWindow.player.height = PLAYER_HEIGHT_FULL
         playerWindow.height = WINDOW_HEIGHT_FULL
-        break
       }
     }
 
@@ -106,5 +120,5 @@ package radiko {
       })
       appUpdater.initialize()
     }
- }
+  }
 }

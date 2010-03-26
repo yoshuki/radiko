@@ -1,6 +1,5 @@
 import com.adobe.serialization.json.JSON
 
-import flash.desktop.NativeApplication
 import flash.display.NativeWindowDisplayState
 import flash.display.Screen
 import flash.events.NativeWindowDisplayStateEvent
@@ -26,11 +25,11 @@ private function initWin(event:AIREvent):void {
   // 設定を読み込む
   try {
     Radiko.openFile(Radiko.CONFIG_FILE, FileMode.READ, function (fs:FileStream):void {
-      Radiko.config = JSON.decode(fs.readUTF())
-      if (Radiko.config.station != null) station = Radiko.config.station
-      if (Radiko.config.winMode != null) winMode = Radiko.config.winMode
-      if (Radiko.config.winPosX != null) winPosX = Radiko.config.winPosX
-      if (Radiko.config.winPosY != null) winPosY = Radiko.config.winPosY
+      var config:Object = Radiko.config = JSON.decode(fs.readUTF())
+      if (config.station != null) station = config.station
+      if (config.winMode != null) winMode = config.winMode
+      if (config.winPosX != null) winPosX = config.winPosX
+      if (config.winPosY != null) winPosY = config.winPosY
     })
   } catch (error:Error) {
     trace(error)
@@ -57,7 +56,7 @@ private function initWin(event:AIREvent):void {
 
   // 読み込んだウィンドウモードに切り替える
   window.visible = false
-  Radiko.changePlayerWindowMode(window.windowMode.selectedItem.data)
+  Radiko.changePlayerWindowMode(winMode)
   window.visible = Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
 
   var vb:Rectangle = Screen.mainScreen.visibleBounds
@@ -95,31 +94,27 @@ private function initWin(event:AIREvent):void {
   })
 
   window.addEventListener(FlexNativeWindowBoundsEvent.WINDOW_MOVE, function (event:FlexNativeWindowBoundsEvent):void {
+    // ウィンドウの現在地を保存する
     var nw:NativeWindow = (event.target as Window).nativeWindow
     Radiko.config.winPosX = nw.x
     Radiko.config.winPosY = nw.y
   })
-
-  window.addEventListener(NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, function (event:NativeWindowDisplayStateEvent):void {
-    if (event.afterDisplayState == NativeWindowDisplayState.NORMAL) {
-      // ウィンドウを元に戻したら表示してアプリケーションをアクティブにする
-      Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
-      window.visible = true
-      NativeApplication.nativeApplication.activate()
-    }
-  })
   window.addEventListener(NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGE, function (event:NativeWindowDisplayStateEvent):void {
-    if (event.afterDisplayState == NativeWindowDisplayState.MINIMIZED) {
-      // ウィンドウを最小化したら非表示にする
-      Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = false
-      window.visible = false
+    // ウィンドウを最小化時には非表示にし、復元時には表示する
+    switch (event.afterDisplayState) {
+    case NativeWindowDisplayState.MINIMIZED:
+      Radiko.togglePlayerWindow(Radiko.WINDOW_TOGGLE_HIDE)
+      break
+    case NativeWindowDisplayState.NORMAL:
+      Radiko.togglePlayerWindow(Radiko.WINDOW_TOGGLE_SHOW)
+      break
     }
   })
   window.addEventListener(Event.CLOSING, function (event:Event):void {
     if (!Radiko.exiting) {
       // アプリケーション終了中でなければウィンドウを閉じずに非表示にする
       event.preventDefault()
-      (event.target as Window).minimize()
+      Radiko.togglePlayerWindow(Radiko.WINDOW_TOGGLE_HIDE)
     }
   })
   window.addEventListener(Event.CLOSE, function (event:Event):void {

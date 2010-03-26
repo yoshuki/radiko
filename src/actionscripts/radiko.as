@@ -26,11 +26,7 @@ private function initApp(event:FlexEvent):void {
       var appInfo:Object = Radiko.appInfo
       stIcon.tooltip = appInfo.name + ' ' + appInfo.version
       icon.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
-        if (Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked) {
-          NativeApplication.nativeApplication.activate()
-        } else {
-          Radiko.togglePlayerWindow()
-        }
+        Radiko.togglePlayerWindow(Radiko.WINDOW_TOGGLE_SHOW)
       })
     } else if (NativeApplication.supportsDockIcon) {
       var dIcon:DockIcon = DockIcon(NativeApplication.nativeApplication.icon)
@@ -60,11 +56,7 @@ private function initApp(event:FlexEvent):void {
 
     // Windowsは起動時のみ、Macはドックアイコンをクリック時にも起きる
     NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, function (event:InvokeEvent):void {
-      if (Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked) {
-        NativeApplication.nativeApplication.activate()
-      } else {
-        Radiko.togglePlayerWindow()
-      }
+      Radiko.togglePlayerWindow(Radiko.WINDOW_TOGGLE_SHOW)
     })
 
     // 終了時に、他のイベントで終了中を検知するためフラグを立てる
