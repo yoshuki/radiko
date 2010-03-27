@@ -28,5 +28,5 @@
       <mx:Object label="ミニ" data="{Radiko.WINDOW_MODE_MINI}"/>
     </mx:ArrayCollection>
   </mx:ComboBox>
-  <mx:HTML x="0" y="45" width="250" height="{Radiko.PLAYER_HEIGHT_FULL}" horizontalScrollPolicy="off" verticalScrollPolicy="off" id="player"/>
+  <mx:HTML x="0" y="45" width="250" height="{Radiko.PLAYER_HEIGHT_FULL}" horizontalScrollPolicy="off" verticalScrollPolicy="off" id="player" complete="initHtml(event)"/>
 </mx:Window>

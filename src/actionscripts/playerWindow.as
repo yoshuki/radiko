@@ -2,9 +2,11 @@ import com.adobe.serialization.json.JSON
 
 import flash.display.NativeWindowDisplayState
 import flash.display.Screen
+import flash.events.Event
 import flash.events.NativeWindowDisplayStateEvent
 import flash.geom.Rectangle
 
+import mx.controls.HTML
 import mx.core.Window
 import mx.events.AIREvent
 import mx.events.FlexNativeWindowBoundsEvent
@@ -14,7 +16,7 @@ import radiko.Radiko
 
 private function initWin(event:AIREvent):void {
   var window:PlayerWindow = (event.target as PlayerWindow)
-  // メモリ使用量軽減対策(効果未確認)
+  // メモリ使用量軽減対策
   window.removeEventListener(AIREvent.WINDOW_COMPLETE, initWin)
 
   var station:String = Radiko.DEFAULT_STATION
@@ -44,7 +46,7 @@ private function initWin(event:AIREvent):void {
   }
 
   // 読み込んだ放送局のページを開く
-  window.player.location = Radiko.PLAYER_URL_BASE + window.stations.selectedItem.data
+  window.player.location = Radiko.PLAYER_URL_BASE + station
 
   // 読み込んだウィンドウモードを選択状態にする
   for each (var wmVal:Object in window.windowMode.dataProvider) {
@@ -55,9 +57,7 @@ private function initWin(event:AIREvent):void {
   }
 
   // 読み込んだウィンドウモードに切り替える
-  window.visible = false
   Radiko.changePlayerWindowMode(winMode)
-  window.visible = Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = true
 
   var vb:Rectangle = Screen.mainScreen.visibleBounds
 
@@ -78,6 +78,9 @@ private function initWin(event:AIREvent):void {
   // ウィンドウのタイトル
   var appInfo:Object = Radiko.appInfo
   Radiko.playerWindow.title = appInfo.name + ' ' + appInfo.version
+
+  // メニューの表示状態をウィンドウの表示状態に合わせる
+  Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = window.visible
 
   window.stations.addEventListener(ListEvent.CHANGE, function (event:ListEvent):void {
     var data:String = (event.target as ComboBox).selectedItem.data
@@ -127,4 +130,12 @@ private function initWin(event:AIREvent):void {
       trace(error)
     }
   })
+}
+
+private function initHtml(event:Event):void {
+  var html:HTML = (event.target as HTML)
+  // クリックでリンク先を開くためにJSの関数を置き換える
+  html.domWindow.openWeb = (function (url:String, target:String='radiko_opener'):void {
+      navigateToURL(new URLRequest(url), target)
+    })
 }

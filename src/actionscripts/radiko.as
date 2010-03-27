@@ -11,7 +11,7 @@ private var IconImage16:Class
 private var IconImage128:Class
 
 private function initApp(event:FlexEvent):void {
-  // メモリ使用量軽減対策(効果未確認)
+  // メモリ使用量軽減対策
   (event.target as Application).removeEventListener(FlexEvent.APPLICATION_COMPLETE, initApp)
 
   if (NativeApplication.supportsSystemTrayIcon || NativeApplication.supportsDockIcon) {
