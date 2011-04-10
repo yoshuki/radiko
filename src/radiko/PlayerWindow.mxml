@@ -11,7 +11,7 @@
   </fx:Declarations>
   <fx:Script source="actionscripts/playerWindow.as"/>
   <s:Button x="0" y="0" width="175" height="25" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
-  <s:CheckBox x="183" y="3" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
+  <s:CheckBox x="181" y="3" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
   <s:DropDownList x="0" y="25" width="175" height="25" id="stations">
     <mx:ArrayCollection>
       <!-- 関東 -->
@@ -23,12 +23,12 @@
       <fx:Object label="TOKYO FM"     data="FMT"/>
       <fx:Object label="J-WAVE"       data="FMJ"/>
       <!-- 関西 -->
-      <fx:Object label="ABCラジオ"    data="ABC"/>
-      <fx:Object label="MBSラジオ"    data="MBS"/>
+      <fx:Object label="朝日放送"     data="ABC"/>
+      <fx:Object label="毎日放送"     data="MBS"/>
       <fx:Object label="ラジオ大阪"   data="OBC"/>
       <fx:Object label="FM COCOLO"    data="CCL"/>
       <fx:Object label="FM802"        data="802"/>
-      <fx:Object label="FM大阪"       data="FMO"/>
+      <fx:Object label="FM OSAKA"     data="FMO"/>
     </mx:ArrayCollection>
   </s:DropDownList>
   <s:DropDownList x="175" y="25" width="75" height="25" id="windowMode">
