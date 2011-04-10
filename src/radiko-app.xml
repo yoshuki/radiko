@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<application xmlns="http://ns.adobe.com/air/application/1.5.3">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<application xmlns="http://ns.adobe.com/air/application/2.0">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
 	Specifies parameters for identifying, installing, and launching AIR applications.
 
-	xmlns - The Adobe AIR namespace: http://ns.adobe.com/air/application/1.5.3
+	xmlns - The Adobe AIR namespace: http://ns.adobe.com/air/application/2.0
 			The last segment of the namespace specifies the version 
 			of the AIR runtime required for this application to run.
 			
@@ -13,7 +13,8 @@
 			the application. Optional.
 -->
 
-	<!-- The application identifier string, unique to this application. Required. -->
+	<!-- A universally unique application identifier. Must be unique across all AIR applications.
+	     Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
 	<id>radiko</id>
 
 	<!-- Used as the filename for the application. Required. -->
@@ -24,7 +25,7 @@
 	<name>radiko</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>0.9</version>
+	<version>1.0.0</version>
 
 	<!-- Description, displayed in the AIR application installer.
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -40,7 +41,7 @@
 	<initialWindow>
 		<!-- The main SWF or HTML file of the application. Required. -->
 		<!-- Note: In Flash Builder, the SWF reference is set automatically. -->
-		<content>[この値は Flex　Builder の出力ファイル app.xml　に上書きされます]</content>
+		<content>[この値は Flash Builder の出力ファイル app.xml に上書きされます。]</content>
 		
 		<!-- The title of the main window. Optional. -->
 		<!-- <title></title> -->
@@ -63,10 +64,10 @@
 		<!-- Whether the user can resize the window. Optional. Default true. -->
 		<!-- <resizable></resizable> -->
 
-		<!-- The window's initial width. Optional. -->
+		<!-- The window's initial width in pixels. Optional. -->
 		<!-- <width></width> -->
 
-		<!-- The window's initial height. Optional. -->
+		<!-- The window's initial height in pixels. Optional. -->
 		<!-- <height></height> -->
 
 		<!-- The window's initial x position. Optional. -->
@@ -75,12 +76,19 @@
 		<!-- The window's initial y position. Optional. -->
 		<!-- <y></y> -->
 
-		<!-- The window's minimum size, specified as a width/height pair, such as "400 200". Optional. -->
+		<!-- The window's minimum size, specified as a width/height pair in pixels, such as "400 200". Optional. -->
 		<!-- <minSize></minSize> -->
 
-		<!-- The window's initial maximum size, specified as a width/height pair, such as "1600 1200". Optional. -->
+		<!-- The window's initial maximum size, specified as a width/height pair in pixels, such as "1600 1200". Optional. -->
 		<!-- <maxSize></maxSize> -->
 	</initialWindow>
+
+    <!-- We recommend omitting the supportedProfiles element, -->
+    <!-- which in turn permits your application to be deployed to all -->
+    <!-- devices supported by AIR. If you wish to restrict deployment -->
+    <!-- (i.e., to only mobile devices) then add this element and list -->
+    <!-- only the profiles which your application does support. -->
+    <!-- <supportedProfiles>desktop extendedDesktop mobileDevice extendedMobileDevice</supportedProfiles> -->
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
 	<!-- <installFolder></installFolder> -->
@@ -91,8 +99,8 @@
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
 	<icon>
-		<image16x16>/images/radiko16.png</image16x16>
-		<image128x128>/images/radiko128.png</image128x128>
+		<image16x16>radiko/images/radiko16.png</image16x16>
+		<image128x128>radiko/images/radiko128.png</image128x128>
 	</icon>
 
 	<!-- Whether the application handles the update when a user double-clicks an update version

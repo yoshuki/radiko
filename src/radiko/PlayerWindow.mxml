@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009" 
+          xmlns:s="library://ns.adobe.com/flex/spark" 
+          xmlns:mx="library://ns.adobe.com/flex/mx"
+          width="250" height="{Radiko.WINDOW_HEIGHT_FULL}" maximizable="false" showStatusBar="false" windowComplete="initWin(event)">
+  <s:layout>
+    <s:BasicLayout/>
+  </s:layout>
+  <fx:Declarations>
+    <!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+  </fx:Declarations>
+  <fx:Script source="actionscripts/playerWindow.as"/>
+  <s:Button x="0" y="0" width="175" height="25" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
+  <s:CheckBox x="183" y="3" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
+  <s:DropDownList x="0" y="25" width="175" height="25" id="stations">
+    <mx:ArrayCollection>
+      <!-- 関東 -->
+      <fx:Object label="TBSラジオ"    data="TBS"/>
+      <fx:Object label="文化放送"     data="QRR"/>
+      <fx:Object label="ニッポン放送" data="LFR"/>
+      <fx:Object label="ラジオNIKKEI" data="NSB"/>
+      <fx:Object label="InterFM"      data="INT"/>
+      <fx:Object label="TOKYO FM"     data="FMT"/>
+      <fx:Object label="J-WAVE"       data="FMJ"/>
+      <!-- 関西 -->
+      <fx:Object label="ABCラジオ"    data="ABC"/>
+      <fx:Object label="MBSラジオ"    data="MBS"/>
+      <fx:Object label="ラジオ大阪"   data="OBC"/>
+      <fx:Object label="FM COCOLO"    data="CCL"/>
+      <fx:Object label="FM802"        data="802"/>
+      <fx:Object label="FM大阪"       data="FMO"/>
+    </mx:ArrayCollection>
+  </s:DropDownList>
+  <s:DropDownList x="175" y="25" width="75" height="25" id="windowMode">
+    <mx:ArrayCollection>
+      <fx:Object label="フル" data="{Radiko.WINDOW_MODE_FULL}"/>
+      <fx:Object label="ミニ" data="{Radiko.WINDOW_MODE_MINI}"/>
+    </mx:ArrayCollection>
+  </s:DropDownList>
+  <mx:HTML x="0" y="50" width="250" height="{Radiko.PLAYER_HEIGHT_FULL}" horizontalScrollPolicy="off" verticalScrollPolicy="off" id="player" complete="initHtml(event)"/>
+</s:Window>
