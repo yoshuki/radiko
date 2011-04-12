@@ -22,13 +22,31 @@
       <fx:Object label="InterFM"      data="INT"/>
       <fx:Object label="TOKYO FM"     data="FMT"/>
       <fx:Object label="J-WAVE"       data="FMJ"/>
+      <fx:Object label="ラジオ日本"   data="JORF"/>
+      <fx:Object label="bayfm78"      data="BAYFM78"/>
+      <fx:Object label="NACK5"        data="NACK5"/>
+      <fx:Object label="FMヨコハマ"   data="YFM"/>
+      <fx:Object label="茨城放送"     data="IBS"/>
+      <fx:Object label="RADIO BERRY"  data="RADIOBERRY"/>
+      <fx:Object label="FM GUNMA(未対応)" data="TBS"/>
       <!-- 関西 -->
-      <fx:Object label="朝日放送"     data="ABC"/>
-      <fx:Object label="毎日放送"     data="MBS"/>
+      <fx:Object label="ABCラジオ"    data="ABC"/>
+      <fx:Object label="MBSラジオ"    data="MBS"/>
       <fx:Object label="ラジオ大阪"   data="OBC"/>
       <fx:Object label="FM COCOLO"    data="CCL"/>
       <fx:Object label="FM802"        data="802"/>
       <fx:Object label="FM OSAKA"     data="FMO"/>
+      <fx:Object label="ラジオ関西"   data="CRK"/>
+      <fx:Object label="KBS京都"      data="KBS"/>
+      <fx:Object label="和歌山放送(未対応)" data="ABC"/>
+      <fx:Object label="Kiss FM KOBE" data="KISSFMKOBE"/>
+      <!-- 中京 -->
+      <fx:Object label="CBCラジオ"    data="CBC"/>
+      <fx:Object label="東海ラジオ"   data="TOKAIRADIO"/>
+      <fx:Object label="ぎふチャン"   data="GBS"/>
+      <fx:Object label="ZIP-FM"       data="ZIP-FM"/>
+      <fx:Object label="FM AICHI"     data="FMAICHI"/>
+      <fx:Object label="FM三重"       data="FMMIE"/>
     </mx:ArrayCollection>
   </s:DropDownList>
   <s:DropDownList x="175" y="25" width="75" height="25" id="windowMode">
