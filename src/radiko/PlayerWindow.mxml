@@ -38,7 +38,7 @@
       <fx:Object label="FM OSAKA"     data="FMO"/>
       <fx:Object label="ラジオ関西"   data="CRK"/>
       <fx:Object label="KBS京都"      data="KBS"/>
-      <fx:Object label="和歌山放送(未対応)" data="ABC"/>
+      <fx:Object label="和歌山放送"   data="WBS"/>
       <fx:Object label="Kiss FM KOBE" data="KISSFMKOBE"/>
       <!-- 中京 -->
       <fx:Object label="CBCラジオ"    data="CBC"/>
