@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009" 
-          xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
           xmlns:mx="library://ns.adobe.com/flex/mx"
           width="250" height="{Radiko.WINDOW_HEIGHT_FULL}" maximizable="false" showStatusBar="false" windowComplete="initWin(event)">
   <s:layout>
     <s:BasicLayout/>
   </s:layout>
   <fx:Declarations>
-    <!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
-  </fx:Declarations>
-  <fx:Script source="actionscripts/playerWindow.as"/>
-  <s:Button x="0" y="0" width="175" height="25" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
-  <s:CheckBox x="181" y="3" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
-  <s:DropDownList x="0" y="25" width="175" height="25" id="stations">
-    <mx:ArrayCollection>
-      <!-- 関東 -->
+    <mx:ArrayList id="stationValuesKanto">
       <fx:Object label="TBSラジオ"    data="TBS"/>
       <fx:Object label="文化放送"     data="QRR"/>
       <fx:Object label="ニッポン放送" data="LFR"/>
@@ -29,31 +22,62 @@
       <fx:Object label="茨城放送"     data="IBS"/>
       <fx:Object label="RADIO BERRY"  data="RADIOBERRY"/>
       <fx:Object label="FM GUNMA(未対応)" data="TBS"/>
-      <!-- 関西 -->
+    </mx:ArrayList>
+    <mx:ArrayList id="stationValuesKansai">
       <fx:Object label="ABCラジオ"    data="ABC"/>
       <fx:Object label="MBSラジオ"    data="MBS"/>
       <fx:Object label="ラジオ大阪"   data="OBC"/>
       <fx:Object label="FM COCOLO"    data="CCL"/>
       <fx:Object label="FM802"        data="802"/>
       <fx:Object label="FM OSAKA"     data="FMO"/>
-      <fx:Object label="ラジオ関西"   data="CRK"/>
-      <fx:Object label="KBS京都"      data="KBS"/>
-      <fx:Object label="和歌山放送"   data="WBS"/>
+      <fx:Object label="ラジオNIKKEI" data="NSB"/>
       <fx:Object label="Kiss FM KOBE" data="KISSFMKOBE"/>
-      <!-- 中京 -->
+      <fx:Object label="KBS京都"      data="KBS"/>
+      <fx:Object label="ラジオ関西"   data="CRK"/>
+      <fx:Object label="和歌山放送"   data="WBS"/>
+    </mx:ArrayList>
+    <mx:ArrayList id="stationValuesChukyo">
       <fx:Object label="CBCラジオ"    data="CBC"/>
       <fx:Object label="東海ラジオ"   data="TOKAIRADIO"/>
       <fx:Object label="ぎふチャン"   data="GBS"/>
       <fx:Object label="ZIP-FM"       data="ZIP-FM"/>
-      <fx:Object label="FM AICHI"     data="FMAICHI"/>
       <fx:Object label="FM三重"       data="FMMIE"/>
-    </mx:ArrayCollection>
-  </s:DropDownList>
-  <s:DropDownList x="175" y="25" width="75" height="25" id="windowMode">
-    <mx:ArrayCollection>
+      <fx:Object label="FM AICHI"     data="FMAICHI"/>
+    </mx:ArrayList>
+    <mx:ArrayList id="stationValuesHokkaido">
+      <fx:Object label="HBCラジオ"    data="HBC"/>
+      <fx:Object label="STVラジオ"    data="STV"/>
+      <fx:Object label="ラジオNIKKEI" data="NSB"/>
+      <fx:Object label="AIR-G'"       data="AIR-G"/>
+    </mx:ArrayList>
+    <mx:ArrayList id="stationValuesFukuoka">
+      <fx:Object label="RKBラジオ"    data="RKB"/>
+      <fx:Object label="KBCラジオ"    data="KBC"/>
+      <fx:Object label="ラジオNIKKEI" data="NSB"/>
+      <fx:Object label="Love FM(未対応)" data="RKB"/>
+      <fx:Object label="FM FUKUOKA"   data="FMFUKUOKA"/>
+    </mx:ArrayList>
+  </fx:Declarations>
+  <fx:Script source="actionscripts/playerWindow.as"/>
+  <s:Button x="0" y="0" width="110" height="25" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
+  <s:DropDownList x="110" y="0" width="65" height="25" id="windowMode">
+    <mx:ArrayList>
       <fx:Object label="フル" data="{Radiko.WINDOW_MODE_FULL}"/>
       <fx:Object label="ミニ" data="{Radiko.WINDOW_MODE_MINI}"/>
-    </mx:ArrayCollection>
+    </mx:ArrayList>
+  </s:DropDownList>
+  <s:CheckBox x="181" y="3" label="常に前面" click="this.alwaysInFront = event.target.selected"/>
+  <s:DropDownList x="0" y="25" width="75" height="25" id="regions">
+    <mx:ArrayList>
+      <fx:Object label="関東"   data="{Radiko.REGION_KANTO}"/>
+      <fx:Object label="関西"   data="{Radiko.REGION_KANSAI}"/>
+      <fx:Object label="中京"   data="{Radiko.REGION_CHUKYO}"/>
+      <fx:Object label="北海道" data="{Radiko.REGION_HOKKAIDO}"/>
+      <fx:Object label="福岡県" data="{Radiko.REGION_FUKUOKA}"/>
+    </mx:ArrayList>
+  </s:DropDownList>
+  <s:DropDownList x="75" y="25" width="175" height="25" id="stations">
+    <mx:ArrayList id="stationValues"></mx:ArrayList>
   </s:DropDownList>
   <mx:HTML x="0" y="50" width="250" height="{Radiko.PLAYER_HEIGHT_FULL}" horizontalScrollPolicy="off" verticalScrollPolicy="off" id="player" complete="initHtml(event)"/>
 </s:Window>

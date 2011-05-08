@@ -20,7 +20,7 @@ private function initApp(event:FlexEvent):void {
     // システムトレイ・ドックアイコンを登録
     var icon:InteractiveIcon;
     if (NativeApplication.supportsSystemTrayIcon) {
-      var stIcon:SystemTrayIcon = SystemTrayIcon(NativeApplication.nativeApplication.icon);
+      var stIcon:SystemTrayIcon = (NativeApplication.nativeApplication.icon as SystemTrayIcon);
       icon = stIcon;
       stIcon.menu = menu;
       var appInfo:Object = Radiko.appInfo;
@@ -29,14 +29,18 @@ private function initApp(event:FlexEvent):void {
         Radiko.togglePlayerWindow(Radiko.WINDOW_TOGGLE_SHOW);
       });
     } else if (NativeApplication.supportsDockIcon) {
-      var dIcon:DockIcon = DockIcon(NativeApplication.nativeApplication.icon);
+      var dIcon:DockIcon = (NativeApplication.nativeApplication.icon as DockIcon);
       icon = dIcon;
       dIcon.menu = menu;
+    } else {
+      trace('Icon is not supported.');
+      // 操作不能回避のため、アイコンが登録できなければ終了
+      NativeApplication.nativeApplication.exit();
     }
 
     // アイコン画像
-    var iconImage16:Bitmap  = Bitmap(new IconImage16());
-    var iconImage128:Bitmap = Bitmap(new IconImage128());
+    var iconImage16:Bitmap  = (new IconImage16() as Bitmap);
+    var iconImage128:Bitmap = (new IconImage128() as Bitmap);
     icon.bitmaps = [iconImage16, iconImage128];
 
     // メニュー - 表示
@@ -67,7 +71,7 @@ private function initApp(event:FlexEvent):void {
     // アップデート確認
     Radiko.checkUpdate();
   } else {
-    trace('Failed to create icon.');
+    trace('Icon is not supported.');
     // 操作不能回避のため、アイコンが登録できなければ終了
     NativeApplication.nativeApplication.exit();
   }

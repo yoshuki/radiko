@@ -10,15 +10,17 @@ import mx.controls.HTML;
 import mx.core.Window;
 import mx.events.AIREvent;
 import mx.events.FlexNativeWindowBoundsEvent;
-import spark.events.IndexChangeEvent;
 
 import radiko.Radiko;
+
+import spark.events.IndexChangeEvent;
 
 private function initWin(event:AIREvent):void {
   var window:PlayerWindow = (event.target as PlayerWindow);
   // メモリ使用量軽減対策
   window.removeEventListener(AIREvent.WINDOW_COMPLETE, initWin);
 
+  var region:String = Radiko.DEFAULT_REGION;
   var station:String = Radiko.DEFAULT_STATION;
   var winMode:int = Radiko.WINDOW_MODE_FULL;
   var winPosX:Number;
@@ -28,6 +30,7 @@ private function initWin(event:AIREvent):void {
   try {
     Radiko.openFile(Radiko.CONFIG_FILE, FileMode.READ, function (fs:FileStream):void {
       var config:Object = Radiko.config = JSON.decode(fs.readUTF());
+      if (config.region  != null) region = config.region;
       if (config.station != null) station = config.station;
       if (config.winMode != null) winMode = config.winMode;
       if (config.winPosX != null) winPosX = config.winPosX;
@@ -37,24 +40,26 @@ private function initWin(event:AIREvent):void {
     trace(error);
   }
 
-  // 読み込んだ放送局を選択状態にする
-  for each (var sVal:Object in window.stations.dataProvider) {
-    if (sVal.data == station) {
-      window.stations.selectedItem = sVal;
+  // 読み込んだ地域を選択状態にする
+  var rVals:Array = window.regions.dataProvider.toArray();
+  for each (var rVal:Object in rVals) {
+    if (rVal.data == region) {
+      window.regions.selectedItem = rVal;
       break;
     }
   }
-
-  // 読み込んだ放送局のページを開く
-  window.player.location = Radiko.PLAYER_URL_BASE + station;
+  if (window.regions.selectedItem == null) window.regions.selectedItem = rVals[0];
+  Radiko.changeRegion(window.regions.selectedItem.data, station);
 
   // 読み込んだウィンドウモードを選択状態にする
-  for each (var wmVal:Object in window.windowMode.dataProvider) {
+  var wmVals:Array = window.windowMode.dataProvider.toArray();
+  for each (var wmVal:Object in wmVals) {
     if (wmVal.data == winMode) {
       window.windowMode.selectedItem = wmVal;
       break;
     }
   }
+  if (window.windowMode.selectedItem == null) window.windowMode.selectedItem = wmVals[0];
 
   // 読み込んだウィンドウモードに切り替える
   Radiko.changePlayerWindowMode(winMode);
@@ -82,11 +87,14 @@ private function initWin(event:AIREvent):void {
   // メニューの表示状態をウィンドウの表示状態に合わせる
   Radiko.iconMenu.getItemByName(Radiko.MENU_SHOW_WINDOW).checked = window.visible;
 
+  window.regions.addEventListener(IndexChangeEvent.CHANGE, function (event:IndexChangeEvent):void {
+    // 地域を切り替える
+    Radiko.changeRegion((event.target as DropDownList).selectedItem.data);
+  });
+
   window.stations.addEventListener(IndexChangeEvent.CHANGE, function (event:IndexChangeEvent):void {
-    var data:String = (event.target as DropDownList).selectedItem.data;
-    Radiko.config.station = data;
-    // 選択された放送局のページを開く
-    Radiko.playerWindow.player.location = Radiko.PLAYER_URL_BASE + data;
+    // 放送局を切り替える
+    Radiko.changeStation((event.target as DropDownList).selectedItem.data);
   });
 
   window.windowMode.addEventListener(IndexChangeEvent.CHANGE, function (event:IndexChangeEvent):void {
@@ -125,7 +133,7 @@ private function initWin(event:AIREvent):void {
     try {
       Radiko.openFile(Radiko.CONFIG_FILE, FileMode.WRITE, function (fs:FileStream):void {
         fs.writeUTF(JSON.encode(Radiko.config));
-      })
+      });
     } catch (error:Error) {
       trace(error);
     }
