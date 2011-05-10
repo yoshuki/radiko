@@ -54,7 +54,7 @@
       <fx:Object label="RKBラジオ"    data="RKB"/>
       <fx:Object label="KBCラジオ"    data="KBC"/>
       <fx:Object label="ラジオNIKKEI" data="NSB"/>
-      <fx:Object label="Love FM(未対応)" data="RKB"/>
+      <fx:Object label="Love FM"      data="LOVEFM"/>
       <fx:Object label="FM FUKUOKA"   data="FMFUKUOKA"/>
     </mx:ArrayList>
   </fx:Declarations>
