@@ -21,7 +21,7 @@
       <fx:Object label="FMヨコハマ"   data="YFM"/>
       <fx:Object label="茨城放送"     data="IBS"/>
       <fx:Object label="RADIO BERRY"  data="RADIOBERRY"/>
-      <fx:Object label="FM GUNMA(未対応)" data="TBS"/>
+      <fx:Object label="FM GUNMA"     data="FMGUNMA"/>
     </mx:ArrayList>
     <mx:ArrayList id="stationValuesKansai">
       <fx:Object label="ABCラジオ"    data="ABC"/>
