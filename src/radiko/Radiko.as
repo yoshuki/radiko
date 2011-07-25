@@ -29,6 +29,7 @@ package radiko {
     public static const REGION_CHUKYO:String = 'CHUKYO';
     public static const REGION_HOKKAIDO:String = 'HOKKAIDO';
     public static const REGION_FUKUOKA:String = 'FUKUOKA';
+    public static const REGION_HIROSHIMA:String = 'HIROSHIMA';
 
     // アプリケーション終了中フラグ
     public static var exiting:Boolean = false;
@@ -137,6 +138,9 @@ package radiko {
           break;
         case Radiko.REGION_FUKUOKA:
           stationValues = playerWindow.stationValuesFukuoka;
+          break;
+        case Radiko.REGION_HIROSHIMA:
+          stationValues = playerWindow.stationValuesHiroshima;
           break;
         default:
           stationValues = playerWindow.stationValuesKanto;

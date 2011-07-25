@@ -57,6 +57,11 @@
       <fx:Object label="Love FM"      data="LOVEFM"/>
       <fx:Object label="FM FUKUOKA"   data="FMFUKUOKA"/>
     </mx:ArrayList>
+    <mx:ArrayList id="stationValuesHiroshima">
+      <fx:Object label="中国放送"     data="RCC"/>
+      <fx:Object label="ラジオNIKKEI" data="NSB"/>
+      <fx:Object label="広島FM"       data="HFM"/>
+    </mx:ArrayList>
   </fx:Declarations>
   <fx:Script source="actionscripts/playerWindow.as"/>
   <s:Button x="0" y="0" width="110" height="25" label="トップページ" click="navigateToURL(new URLRequest('http://radiko.jp/'))"/>
@@ -74,6 +79,7 @@
       <fx:Object label="中京"   data="{Radiko.REGION_CHUKYO}"/>
       <fx:Object label="北海道" data="{Radiko.REGION_HOKKAIDO}"/>
       <fx:Object label="福岡県" data="{Radiko.REGION_FUKUOKA}"/>
+      <fx:Object label="広島県" data="{Radiko.REGION_HIROSHIMA}"/>
     </mx:ArrayList>
   </s:DropDownList>
   <s:DropDownList x="75" y="25" width="175" height="25" id="stations">
