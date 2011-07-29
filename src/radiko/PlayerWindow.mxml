@@ -35,6 +35,8 @@
       <fx:Object label="KBS京都"      data="KBS"/>
       <fx:Object label="ラジオ関西"   data="CRK"/>
       <fx:Object label="和歌山放送"   data="WBS"/>
+      <fx:Object label="FM京都"       data="ALPHA-STATION"/>
+      <fx:Object label="FM滋賀"       data="E-RADIO"/>
     </mx:ArrayList>
     <mx:ArrayList id="stationValuesChukyo">
       <fx:Object label="CBCラジオ"    data="CBC"/>
