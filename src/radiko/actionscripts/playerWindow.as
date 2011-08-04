@@ -10,6 +10,7 @@ import mx.controls.HTML;
 import mx.core.Window;
 import mx.events.AIREvent;
 import mx.events.FlexNativeWindowBoundsEvent;
+import mx.utils.StringUtil;
 
 import radiko.Radiko;
 
@@ -144,6 +145,6 @@ private function initHtml(event:Event):void {
   var html:HTML = (event.target as HTML);
   // クリックでリンク先を開くためにJSの関数を置き換える
   html.domWindow.openWeb = (function (url:String, target:String='radiko_opener'):void {
-      navigateToURL(new URLRequest(url), target);
+      navigateToURL(new URLRequest(StringUtil.trim(url)), target);
     });
 }
